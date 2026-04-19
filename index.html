@@ -84,7 +84,15 @@
         </header>
 
         <div class="map-wrapper" id="map-wrapper">
+          <!-- Holographic Foundation Layers -->
+          <div class="hologram-grid overlay-layer hidden-2d"></div>
+          <div class="telemetry-rings overlay-layer hidden-2d">
+            <div class="ring ring-outer"></div>
+            <div class="ring ring-inner"></div>
+          </div>
+
           <img src="/stadium_layout.png" id="stadium-layout" alt="Stadium Map layout" />
+          <div class="scanline hidden-2d"></div>
           <canvas id="heatmaplayer"></canvas>
           
           <!-- Routing & Overlay layers -->
