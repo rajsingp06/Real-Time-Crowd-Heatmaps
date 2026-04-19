@@ -6,11 +6,29 @@
     <title>Real-Time Venue Heatmap</title>
     <!-- Google Fonts for Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Mock Firebase Analytics for Google Services Tracking -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
+      const firebaseConfig = { projectId: "real-time-crowd-heatmaps", appId: "1:mock-id" };
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      window.logFirebaseEvent = (eventName) => console.log('Analytics Event:', eventName);
+    </script>
+    
+    <!-- Google Translation Integration -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </head>
   <body>
-    <div id="app" class="dashboard admin-mode">
+    <div id="app" class="dashboard admin-mode" role="application">
       <!-- Sidebar / Bottom Sheet -->
-      <aside class="sidebar" id="main-sidebar">
+      <aside class="sidebar" id="main-sidebar" role="complementary" aria-label="Dashboard Sidebar">
         <div class="sidebar-header">
           <h1>Venue Analytics</h1>
           <span class="status-indicator">● LIVE</span>
@@ -25,7 +43,7 @@
 
         <div class="alerts-section">
           <h2>Active Alerts</h2>
-          <div id="alerts-container" class="alerts-container">
+          <div id="alerts-container" class="alerts-container" aria-live="polite" aria-atomic="true">
             <!-- Populated via JS -->
           </div>
         </div>
@@ -40,13 +58,14 @@
       </aside>
 
       <!-- Main Map Grid -->
-      <main class="map-container">
+      <main class="map-container" role="main">
         <!-- Top Nav for toggling modes -->
-        <header class="top-nav">
+        <header class="top-nav" role="navigation" aria-label="Main Navigation">
            <div class="brand">🏟️ Smart Venue</div>
-           <div class="view-toggle">
-              <button id="btn-admin-mode" class="mode-btn active">Admin</button>
-              <button id="btn-attendee-mode" class="mode-btn">Attendee</button>
+           <div id="google_translate_element" style="margin-left: auto; margin-right: 20px;"></div>
+           <div class="view-toggle" role="group" aria-label="Mode Toggles">
+              <button id="btn-admin-mode" class="mode-btn active" aria-label="Switch to Admin Dashboard Mode">Admin</button>
+              <button id="btn-attendee-mode" class="mode-btn" aria-label="Switch to Attendee Mobile Mode">Attendee</button>
            </div>
         </header>
 
@@ -55,7 +74,9 @@
           <canvas id="heatmaplayer"></canvas>
           
           <!-- Routing & Overlay layers -->
-          <svg id="routing-layer" class="overlay-layer"></svg>
+          <svg id="routing-layer" class="overlay-layer" aria-label="Dynamic Routing Path Layer">
+            <title>Routing Path Visualization</title>
+          </svg>
           
           <!-- Facilities container -->
           <div id="facilities-layer" class="overlay-layer"></div>

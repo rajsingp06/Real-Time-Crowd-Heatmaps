@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
   requestAnimationFrame(loop);
 });
 
+/**
+ * Initializes and binds event listeners for the mode toggle UI controls.
+ */
 function setupUI() {
   const btnAdmin = document.getElementById('btn-admin-mode');
   const btnAttendee = document.getElementById('btn-attendee-mode');
@@ -141,6 +144,10 @@ function drawRoute(start, end) {
   `;
 }
 
+/**
+ * Simulates real-time crowd data via mathematical wave functions.
+ * @returns {Array<{x: number, y: number, intensity: number, radius: number}>} Simulated point entities.
+ */
 function simulateCrowdDensity() {
   const points = [];
   const time = Date.now() / 1000;
@@ -175,6 +182,10 @@ function simulateCrowdDensity() {
   return points;
 }
 
+/**
+ * Iterates through facilities to calculate dynamic wait times based on nearby crowd density.
+ * @param {Array<{x: number, y: number, intensity: number}>} points - Current active density points.
+ */
 function updateWaitTimes(points) {
   facilities.forEach(facility => {
     const nearby = points.filter(p => {

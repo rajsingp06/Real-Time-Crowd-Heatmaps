@@ -1,5 +1,12 @@
-// Heatmap generation on HTML5 Canvas
+/**
+ * Heatmap generation on HTML5 Canvas.
+ * Optimizes processing performance by down-scaling resolution internally.
+ */
 export class Heatmap {
+  /**
+   * Initializes the heatmap renderer and attaches resize listeners.
+   * @param {HTMLCanvasElement} canvas - The target canvas DOM element.
+   */
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -21,11 +28,18 @@ export class Heatmap {
     this.canvas.style.height = '100%';
   }
 
+  /**
+   * Applies new density point data and triggers a frame render.
+   * @param {Array<{x: number, y: number, intensity: number, radius?: number}>} points - The crowd data points.
+   */
   setPoints(points) {
     this.points = points;
     this.draw();
   }
 
+  /**
+   * Clears the canvas and recursively draws gradient orbs for all density points.
+   */
   draw() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     

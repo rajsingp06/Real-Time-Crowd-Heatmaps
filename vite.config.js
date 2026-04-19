@@ -9,5 +9,8 @@ export default defineConfig({
   preview: {
     port: 8080,
     strictPort: true,
+  },
+  test: {
+    environment: 'jsdom'
   }
 });
