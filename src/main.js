@@ -13,10 +13,14 @@ let currentAlerts = [];
 let appMode = 'admin'; // 'admin' or 'attendee'
 let activeRouteFacility = null;
 
+console.log("Vite App: main.js is executing...");
+
+// Mock Attendee Location
 // Mock Attendee Location
 const attendeeLoc = { x: 50, y: 50 };
 
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
+  console.log("Vite App: initApp() called!");
   const canvas = document.getElementById('heatmaplayer');
   const heatmap = new Heatmap(canvas);
 
@@ -61,8 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(loop);
   }
   
+  console.log("Vite App: Entering requestAnimationFrame loop");
   requestAnimationFrame(loop);
-});
+}
+
+console.log("Vite App: Checking readyState. Current status:", document.readyState);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 /**
  * Initializes and binds event listeners for the mode toggle UI controls.
