@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Real-Time Venue Heatmap</title>
+    <!-- Google Fonts for Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app" class="dashboard admin-mode">
+      <!-- Sidebar / Bottom Sheet -->
+      <aside class="sidebar" id="main-sidebar">
+        <div class="sidebar-header">
+          <h1>Venue Analytics</h1>
+          <span class="status-indicator">● LIVE</span>
+        </div>
+
+        <div class="stats-section">
+          <h2 id="wait-times-title">Facility Wait Times</h2>
+          <ul class="wait-times-list" id="wait-times-list">
+            <!-- Populated via JS -->
+          </ul>
+        </div>
+
+        <div class="alerts-section">
+          <h2>Active Alerts</h2>
+          <div id="alerts-container" class="alerts-container">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+        
+        <!-- Smart Route Suggestions (Attendee Mode only) -->
+        <div id="route-panel" class="route-panel hidden">
+          <h2>Your Navigation</h2>
+          <div id="route-details" class="route-details">
+             <p>Select a facility on the map to find the best route.</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Map Grid -->
+      <main class="map-container">
+        <!-- Top Nav for toggling modes -->
+        <header class="top-nav">
+           <div class="brand">🏟️ Smart Venue</div>
+           <div class="view-toggle">
+              <button id="btn-admin-mode" class="mode-btn active">Admin</button>
+              <button id="btn-attendee-mode" class="mode-btn">Attendee</button>
+           </div>
+        </header>
+
+        <div class="map-wrapper" id="map-wrapper">
+          <img src="/stadium_layout.png" id="stadium-layout" alt="Stadium Map layout" />
+          <canvas id="heatmaplayer"></canvas>
+          
+          <!-- Routing & Overlay layers -->
+          <svg id="routing-layer" class="overlay-layer"></svg>
+          
+          <!-- Facilities container -->
+          <div id="facilities-layer" class="overlay-layer"></div>
+
+          <!-- Mock current attendee location -->
+          <div id="current-location" class="location-marker hidden">
+            <div class="pulse-ring"></div>
+            <div class="marker-core"></div>
+          </div>
+        </div>
+        
+        <!-- Bottom Floating Bar for overall stats (Admin Only) -->
+        <div class="bottom-stats-bar" id="admin-stats-bar">
+          <div class="stat-card">
+            <span class="stat-label">Total Attendance</span>
+            <span class="stat-value" id="total-attendance">45,210</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Peak Sector</span>
+            <span class="stat-value" id="peak-sector">North Stand</span>
+          </div>
+           <div class="stat-card">
+            <span class="stat-label">Avg Flow Rate</span>
+            <span class="stat-value" id="flow-rate">120 pax/min</span>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
