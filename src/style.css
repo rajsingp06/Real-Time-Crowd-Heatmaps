@@ -167,6 +167,7 @@ body {
 
 /* Isometric 3D Mode */
 .isometric-active .map-wrapper {
+  overflow: visible; /* CRITICAL: overflow hidden destroys CSS preserve-3d */
   transform: rotateX(55deg) rotateZ(-35deg) scale(0.85);
   box-shadow: -20px 30px 60px rgba(0, 210, 255, 0.3), 0 0 20px rgba(0, 210, 255, 0.2);
 }
@@ -265,6 +266,7 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .mode-btn.active {
