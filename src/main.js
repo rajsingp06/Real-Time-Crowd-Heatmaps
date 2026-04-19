@@ -12,6 +12,8 @@ const facilities = [
 let currentAlerts = [];
 let appMode = 'admin'; // 'admin' or 'attendee'
 let activeRouteFacility = null;
+let is3DMode = false;
+let predictiveChart = null;
 
 console.log("Vite App: main.js is executing...");
 
@@ -25,6 +27,7 @@ function initApp() {
   const heatmap = new Heatmap(canvas);
 
   setupUI();
+  initChart();
   renderFacilityMarkers();
 
   let lastUIUpdate = 0;
@@ -80,9 +83,21 @@ if (document.readyState === 'loading') {
  * Initializes and binds event listeners for the mode toggle UI controls.
  */
 function setupUI() {
+  const btn3D = document.getElementById('btn-3d-mode');
   const btnAdmin = document.getElementById('btn-admin-mode');
   const btnAttendee = document.getElementById('btn-attendee-mode');
   const app = document.getElementById('app');
+
+  btn3D.addEventListener('click', () => {
+    is3DMode = !is3DMode;
+    if (is3DMode) {
+      document.body.classList.add('isometric-active');
+      btn3D.classList.add('active');
+    } else {
+      document.body.classList.remove('isometric-active');
+      btn3D.classList.remove('active');
+    }
+  });
 
   btnAdmin.addEventListener('click', () => {
     appMode = 'admin';
@@ -319,4 +334,53 @@ function updateGlobalStats(points) {
   document.getElementById('peak-sector').innerText = highest.name;
   
   document.getElementById('flow-rate').innerText = Math.floor(100 + points[1].intensity * 30) + ' pax/min';
+
+  if (predictiveChart) {
+    const trendValue = Math.floor(60 + points[0].intensity * 40 + Math.random() * 10);
+    predictiveChart.data.datasets[0].data.shift();
+    predictiveChart.data.datasets[0].data.push(trendValue);
+    predictiveChart.update('none'); // Update without full animation
+  }
+}
+
+function initChart() {
+  if (!window.Chart) return; // Prevent crash if chart hasn't loaded yet
+  const ctx = document.getElementById('predictiveChart').getContext('2d');
+  predictiveChart = new window.Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Now', '+10m', '+20m', '+30m', '+40m', '+50m', '+60m'],
+      datasets: [{
+        label: 'Projected Congestion Level',
+        data: [45, 48, 55, 62, 50, 40, 35],
+        borderColor: '#00d2ff',
+        backgroundColor: 'rgba(0, 210, 255, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#0a0e17',
+        pointBorderColor: '#00d2ff',
+        pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { 
+        legend: { display: false } 
+      },
+      scales: {
+        x: { 
+          grid: { color: 'rgba(255,255,255,0.05)' }, 
+          ticks: { color: '#8c9bba', font: { family: 'Inter' } } 
+        },
+        y: { 
+          grid: { color: 'rgba(255,255,255,0.05)' }, 
+          ticks: { color: '#8c9bba', font: { family: 'Inter' } },
+          min: 0,
+          max: 100
+        }
+      }
+    }
+  });
 }

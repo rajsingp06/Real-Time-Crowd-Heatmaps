@@ -149,6 +149,7 @@ body {
   justify-content: center;
   align-items: center;
   background: radial-gradient(circle at center, #1a243a 0%, #0a0e17 100%);
+  perspective: 1200px;
 }
 
 .map-wrapper {
@@ -160,6 +161,14 @@ body {
   overflow: hidden;
   box-shadow: 0 0 50px rgba(0, 210, 255, 0.1);
   border: 1px solid rgba(0, 210, 255, 0.2);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.8s ease;
+  transform-style: preserve-3d;
+}
+
+/* Isometric 3D Mode */
+.isometric-active .map-wrapper {
+  transform: rotateX(55deg) rotateZ(-35deg) scale(0.85);
+  box-shadow: -20px 30px 60px rgba(0, 210, 255, 0.3), 0 0 20px rgba(0, 210, 255, 0.2);
 }
 
 #stadium-layout {
@@ -368,12 +377,25 @@ body {
   justify-content: center;
   font-size: 1.2rem;
   cursor: pointer;
-  transition: transform 0.2s, border-color 0.2s;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s;
   box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  transform-style: preserve-3d;
+}
+
+.isometric-active .facility-marker {
+  /* Counter-rotate to stand straight up like a billboard */
+  transform: translate(-50%, -50%) rotateZ(35deg) rotateX(-55deg) translateZ(40px) scale(1.5);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
 }
 
 .facility-marker:hover {
   transform: translate(-50%, -50%) scale(1.1);
+  border-color: var(--accent-blue);
+}
+
+.isometric-active .facility-marker:hover {
+  transform: translate(-50%, -50%) rotateZ(35deg) rotateX(-55deg) translateZ(50px) scale(1.7);
+  box-shadow: 0 15px 30px rgba(0,210,255,0.8);
   border-color: var(--accent-blue);
 }
 

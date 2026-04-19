@@ -26,6 +26,9 @@
       }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+    <!-- Chart.js for Predictive Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div id="app" class="dashboard admin-mode" role="application">
@@ -57,6 +60,14 @@
              <p>Select a facility on the map to find the best route.</p>
           </div>
         </div>
+        
+        <!-- Predictive Chart Container (Admin Mode only) -->
+        <div class="stats-section" id="predictive-chart-panel">
+          <h2>Predictive Congestion (Next 1hr)</h2>
+          <div class="chart-container" style="position: relative; height:200px; width:100%">
+            <canvas id="predictiveChart"></canvas>
+          </div>
+        </div>
       </aside>
 
       <!-- Main Map Grid -->
@@ -66,6 +77,7 @@
            <div class="brand">🏟️ Smart Venue</div>
            <div id="google_translate_element" style="margin-left: auto; margin-right: 20px;"></div>
            <div class="view-toggle" role="group" aria-label="Mode Toggles">
+              <button id="btn-3d-mode" class="mode-btn" aria-label="Toggle 3D View">3D Layout</button>
               <button id="btn-admin-mode" class="mode-btn active" aria-label="Switch to Admin Dashboard Mode">Admin</button>
               <button id="btn-attendee-mode" class="mode-btn" aria-label="Switch to Attendee Mobile Mode">Attendee</button>
            </div>
