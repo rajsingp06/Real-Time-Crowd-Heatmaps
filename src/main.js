@@ -24,14 +24,21 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFacilityMarkers();
 
   let lastUIUpdate = 0;
+  let lastHeatmapUpdate = 0;
+  let currentPoints = [];
 
   function loop() {
-    // 1. Simulate Crowd Data
-    const points = simulateCrowdDensity();
-    heatmap.setPoints(points);
+    const now = Date.now();
 
-    // 2. Simulate Attendee Movement (wander around middle)
-    const time = Date.now() / 1000;
+    // 1. Simulate Crowd Data & Update heatmap at capped 15 FPS (every ~66ms) for high efficiency
+    if (now - lastHeatmapUpdate > 66) {
+      currentPoints = simulateCrowdDensity();
+      heatmap.setPoints(currentPoints);
+      lastHeatmapUpdate = now;
+    }
+
+    // 2. Simulate Attendee Movement (wander around middle) - Smooth 60 FPS
+    const time = now / 1000;
     attendeeLoc.x = 50 + Math.cos(time * 0.1) * 15;
     attendeeLoc.y = 50 + Math.sin(time * 0.15) * 15;
     updateAttendeeLocationUI();
@@ -41,14 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
       drawRoute(attendeeLoc, activeRouteFacility);
     }
 
-    const now = Date.now();
     // Update Stats/UI every 2 seconds
-    if (now - lastUIUpdate > 2000) {
-      updateWaitTimes(points);
+    if (now - lastUIUpdate > 2000 && currentPoints.length > 0) {
+      updateWaitTimes(currentPoints);
       updateWaitTimesUI();
-      generateAlerts(points);
+      generateAlerts(currentPoints);
       updateAlertsUI();
-      if(appMode === 'admin') updateGlobalStats(points);
+      if(appMode === 'admin') updateGlobalStats(currentPoints);
       lastUIUpdate = now;
     }
     

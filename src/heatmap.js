@@ -10,10 +10,15 @@ export class Heatmap {
 
   resize() {
     const parent = this.canvas.parentElement;
-    this.width = parent.clientWidth;
-    this.height = parent.clientHeight;
+    // Lower canvas internal resolution for dramatic performance efficiency
+    this.resolutionFactor = 2.5; 
+    this.width = Math.floor(parent.clientWidth / this.resolutionFactor);
+    this.height = Math.floor(parent.clientHeight / this.resolutionFactor);
     this.canvas.width = this.width;
     this.canvas.height = this.height;
+    // Force CSS to stretch the canvas back to original visual size
+    this.canvas.style.width = '100%';
+    this.canvas.style.height = '100%';
   }
 
   setPoints(points) {
@@ -29,7 +34,7 @@ export class Heatmap {
       // Scale percentages to pixels
       const x = (p.x / 100) * this.width;
       const y = (p.y / 100) * this.height;
-      const radius = p.radius || 100;
+      const radius = (p.radius || 100) / this.resolutionFactor;
 
       const gradient = this.ctx.createRadialGradient(x, y, 0, x, y, radius);
       
@@ -58,7 +63,7 @@ export class Heatmap {
       if (alpha > 0) {
         // Map alpha to a color in the palette
         // Ensure offset stays within bound (0 to 255 * 4)
-        const offset = Math.min(255, Math.floor(alpha)) * 4;
+        const offset = (alpha | 0) * 4; // Bitwise OR is faster than Math.floor
         data[i] = palette[offset];     // R
         data[i + 1] = palette[offset + 1]; // G
         data[i + 2] = palette[offset + 2]; // B
