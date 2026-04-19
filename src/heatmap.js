@@ -12,7 +12,13 @@ export class Heatmap {
     this.ctx = canvas.getContext('2d', { willReadFrequently: true });
     this.points = [];
     this.resize();
-    window.addEventListener('resize', () => this.resize());
+    
+    // Automatically recalculate if parent dimensions change (e.g. image loads)
+    if (window.ResizeObserver) {
+      new ResizeObserver(() => this.resize()).observe(this.canvas.parentElement);
+    } else {
+      window.addEventListener('resize', () => this.resize());
+    }
   }
 
   resize() {
@@ -41,6 +47,8 @@ export class Heatmap {
    * Clears the canvas and recursively draws gradient orbs for all density points.
    */
   draw() {
+    if (this.width <= 0 || this.height <= 0) return;
+    
     this.ctx.clearRect(0, 0, this.width, this.height);
     
     // Draw alpha gradients
