@@ -259,16 +259,40 @@ body {
 }
 
 /* Schematic Image Filter */
-.isometric-active #stadium-layout {
+.isometric-active .stadium-layout-base {
   filter: invert(1) hue-rotate(180deg) brightness(1.5) saturate(2) drop-shadow(0 0 10px rgba(0, 210, 255, 0.5));
   mix-blend-mode: screen;
 }
 
-#stadium-layout {
+.stadium-layout-base {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* Volumetric Tiers */
+.stadium-tier {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transition: all 1s ease-in-out;
+}
+
+.isometric-active .tier-1 {
+  opacity: 0.5;
+  transform: translateZ(40px) scale(1.03);
+}
+
+.isometric-active .tier-2 {
+  opacity: 0.3;
+  transform: translateZ(80px) scale(1.06);
+}
+
+.isometric-active .tier-3 {
+  opacity: 0.15;
+  transform: translateZ(120px) scale(1.09);
 }
 
 #heatmaplayer {

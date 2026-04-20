@@ -81,7 +81,12 @@
             <div class="ring ring-inner"></div>
           </div>
 
-          <img src="/stadium_layout.png" id="stadium-layout" alt="Stadium Map layout" />
+          <img src="/stadium_layout.png" id="stadium-layout" class="stadium-layout-base" alt="Stadium Map layout" />
+          
+          <!-- Volumetric Hologram Tiers (Projected upwards in 3D Mode) -->
+          <img src="/stadium_layout.png" class="stadium-layout-base stadium-tier tier-1 hidden-2d" alt="Hologram Tier 1" />
+          <img src="/stadium_layout.png" class="stadium-layout-base stadium-tier tier-2 hidden-2d" alt="Hologram Tier 2" />
+          <img src="/stadium_layout.png" class="stadium-layout-base stadium-tier tier-3 hidden-2d" alt="Hologram Tier 3" />
           <div class="scanline hidden-2d"></div>
           <canvas id="heatmaplayer"></canvas>
           
