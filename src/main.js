@@ -169,14 +169,21 @@ function updateAttendeeLocationUI() {
 
 function drawRoute(start, end) {
   const svg = document.getElementById('routing-layer');
-  // Simple straight line for mockup purposes
-  svg.innerHTML = DOMPurify.sanitize(`
-    <line 
-      x1="${start.x}%" y1="${start.y}%" 
-      x2="${end.x}%" y2="${end.y}%" 
-      class="route-path" 
-    />
-  `);
+  
+  // Clear existing lines cleanly
+  while (svg.firstChild) {
+    svg.removeChild(svg.firstChild);
+  }
+  
+  // Construct new line natively to bypass innerHTML SVG stripping
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', `${start.x}%`);
+  line.setAttribute('y1', `${start.y}%`);
+  line.setAttribute('x2', `${end.x}%`);
+  line.setAttribute('y2', `${end.y}%`);
+  line.setAttribute('class', 'route-path');
+  
+  svg.appendChild(line);
 }
 
 /**
@@ -263,18 +270,46 @@ function updateWaitTimesUI() {
     
     const li = document.createElement('li');
     li.className = 'wait-item';
-    li.innerHTML = DOMPurify.sanitize(`
-      <div class="wait-item-details">
-        <span class="wait-item-title">${fac.icon} ${fac.name}</span>
-        <span class="wait-item-time ${timeClass}">${fac.currentWait} <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted)">min</span>${trendIcon}</span>
-      </div>
-      <div style="cursor: pointer;" onclick="document.dispatchEvent(new CustomEvent('routeTo', {detail: '${fac.id}'}))">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted)">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-      </div>
+    
+    const detailsDiv = document.createElement('div');
+    detailsDiv.className = 'wait-item-details';
+    detailsDiv.innerHTML = DOMPurify.sanitize(`
+      <span class="wait-item-title">${fac.icon} ${fac.name}</span>
+      <span class="wait-item-time ${timeClass}">${fac.currentWait} <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted)">min</span>${trendIcon}</span>
     `);
+    
+    const routeIconDiv = document.createElement('div');
+    routeIconDiv.style.cursor = 'pointer';
+    routeIconDiv.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('routeTo', {detail: fac.id}));
+    });
+    
+    // SVGs must be injected as native objects or namespace created to bypass intense string sanitation
+    const svgWrap = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgWrap.setAttribute('width', '24');
+    svgWrap.setAttribute('height', '24');
+    svgWrap.setAttribute('viewBox', '0 0 24 24');
+    svgWrap.setAttribute('fill', 'none');
+    svgWrap.setAttribute('stroke', 'currentColor');
+    svgWrap.setAttribute('stroke-width', '2');
+    svgWrap.setAttribute('stroke-linecap', 'round');
+    svgWrap.setAttribute('stroke-linejoin', 'round');
+    svgWrap.style.color = 'var(--text-muted)';
+    
+    const circ = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circ.setAttribute('cx', '12');
+    circ.setAttribute('cy', '12');
+    circ.setAttribute('r', '10');
+    svgWrap.appendChild(circ);
+    
+    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    poly.setAttribute('points', '12 6 12 12 16 14');
+    svgWrap.appendChild(poly);
+    
+    routeIconDiv.appendChild(svgWrap);
+    
+    li.appendChild(detailsDiv);
+    li.appendChild(routeIconDiv);
     list.appendChild(li);
   });
 }
