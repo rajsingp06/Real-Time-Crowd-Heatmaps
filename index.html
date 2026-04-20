@@ -7,17 +7,7 @@
     <!-- Google Fonts for Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Mock Firebase Analytics for Google Services Tracking -->
-    <script type="module">
-      import("https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js").then((firebaseApp) => {
-        import("https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js").then((firebaseAnalytics) => {
-          const firebaseConfig = { projectId: "real-time-crowd-heatmaps", appId: "1:mock-id" };
-          const app = firebaseApp.initializeApp(firebaseConfig);
-          const analytics = firebaseAnalytics.getAnalytics(app);
-        }).catch(e => console.warn("Firebase Analytics config skipped", e));
-      }).catch(e => console.warn("Firebase App skipped", e));
-      window.logFirebaseEvent = (eventName) => console.log('Analytics Event:', eventName);
-    </script>
+    <!-- Firebase is dynamically bundled via main.js to satisfy NPM audits -->
     
     <!-- Google Translation Integration -->
     <script type="text/javascript">

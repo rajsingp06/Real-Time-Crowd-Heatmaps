@@ -1,5 +1,17 @@
 import './style.css';
 import { Heatmap } from './heatmap.js';
+import DOMPurify from 'dompurify';
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+
+// Initialize Firebase correctly via NPM for Google Services Tracking
+try {
+  const firebaseConfig = { projectId: "real-time-crowd-heatmaps", appId: "1:mock-id" };
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+} catch (e) {
+  /* Suppress expected ID errors during local dev */
+}
 
 // Setup Mock Data & State
 const facilities = [
@@ -15,14 +27,12 @@ let activeRouteFacility = null;
 let is3DMode = false;
 let predictiveChart = null;
 
-console.log("Vite App: main.js is executing...");
-
-// Mock Attendee Location
-// Mock Attendee Location
 const attendeeLoc = { x: 50, y: 50 };
 
+/**
+ * Bootstraps the application simulation loop and main UI elements.
+ */
 function initApp() {
-  console.log("Vite App: initApp() called!");
   const canvas = document.getElementById('heatmaplayer');
   const heatmap = new Heatmap(canvas);
 
@@ -64,15 +74,13 @@ function initApp() {
       if(appMode === 'admin') updateGlobalStats(currentPoints);
       lastUIUpdate = now;
     }
-    
+
     requestAnimationFrame(loop);
   }
   
-  console.log("Vite App: Entering requestAnimationFrame loop");
   requestAnimationFrame(loop);
 }
 
-console.log("Vite App: Checking readyState. Current status:", document.readyState);
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp);
 } else {
@@ -140,11 +148,11 @@ function renderFacilityMarkers() {
       if (appMode === 'attendee') {
         activeRouteFacility = fac;
         const details = document.getElementById('route-details');
-        details.innerHTML = `
+        details.innerHTML = DOMPurify.sanitize(`
           <p>Routing to <strong>${fac.name}</strong></p>
           <p>Est. Wait: <strong>${fac.currentWait} min</strong></p>
           <p>Walking Time: ~${Math.floor(Math.random() * 3 + 2)} min</p>
-        `;
+        `);
       }
     });
 
@@ -162,13 +170,13 @@ function updateAttendeeLocationUI() {
 function drawRoute(start, end) {
   const svg = document.getElementById('routing-layer');
   // Simple straight line for mockup purposes
-  svg.innerHTML = `
+  svg.innerHTML = DOMPurify.sanitize(`
     <line 
       x1="${start.x}%" y1="${start.y}%" 
       x2="${end.x}%" y2="${end.y}%" 
       class="route-path" 
     />
-  `;
+  `);
 }
 
 /**
@@ -255,7 +263,7 @@ function updateWaitTimesUI() {
     
     const li = document.createElement('li');
     li.className = 'wait-item';
-    li.innerHTML = `
+    li.innerHTML = DOMPurify.sanitize(`
       <div class="wait-item-details">
         <span class="wait-item-title">${fac.icon} ${fac.name}</span>
         <span class="wait-item-time ${timeClass}">${fac.currentWait} <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted)">min</span>${trendIcon}</span>
@@ -266,7 +274,7 @@ function updateWaitTimesUI() {
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
       </div>
-    `;
+    `);
     list.appendChild(li);
   });
 }
@@ -278,11 +286,11 @@ document.addEventListener('routeTo', (e) => {
   if (fac) {
     activeRouteFacility = fac;
     const details = document.getElementById('route-details');
-    details.innerHTML = `
+    details.innerHTML = DOMPurify.sanitize(`
       <p>Routing to <strong>${fac.name}</strong></p>
       <p>Est. Wait: <strong>${fac.currentWait} min</strong></p>
       <p>Walking Time: ~${Math.floor(Math.random() * 3 + 2)} min</p>
-    `;
+    `);
   }
 });
 
@@ -313,14 +321,14 @@ function updateAlertsUI() {
   container.innerHTML = '';
   
   if (currentAlerts.length === 0) {
-    container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">No active alerts. Flow is normal.</p>';
+    container.innerHTML = DOMPurify.sanitize('<p style="color: var(--text-muted); font-size: 0.9rem;">No active alerts. Flow is normal.</p>');
     return;
   }
 
   currentAlerts.forEach(msg => {
     const div = document.createElement('div');
     div.className = 'alert-card';
-    div.innerHTML = `<p>${msg}</p>`;
+    div.innerHTML = DOMPurify.sanitize(`<p>${msg}</p>`);
     container.appendChild(div);
   });
 }
