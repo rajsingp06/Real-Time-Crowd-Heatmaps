@@ -176,10 +176,8 @@ body {
 .isometric-active .map-wrapper {
   overflow: visible; /* CRITICAL: overflow hidden destroys CSS preserve-3d */
   animation: hologramFloat 6s ease-in-out infinite;
-  box-shadow: -20px 30px 100px rgba(0, 210, 255, 0.4), 
-              0 0 40px rgba(0, 210, 255, 0.4) inset,
-              0 0 100px rgba(0, 210, 255, 0.2);
-  border: 1px solid rgba(0, 210, 255, 0.6);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5); /* Reverting to standard shadow */
+  border: 1px solid rgba(0, 210, 255, 0.2);
 }
 
 .hidden-2d {
@@ -258,41 +256,17 @@ body {
   100% { top: 105%; opacity: 0; }
 }
 
-/* Schematic Image Filter */
-.isometric-active .stadium-layout-base {
-  filter: invert(1) hue-rotate(180deg) brightness(1.5) saturate(2) drop-shadow(0 0 10px rgba(0, 210, 255, 0.5));
-  mix-blend-mode: screen;
+/* Schematic Image Filter - White Blueprint Style */
+.isometric-active #stadium-layout {
+  filter: invert(1) hue-rotate(180deg) brightness(1.2) contrast(1.2) drop-shadow(0 0 5px rgba(0, 210, 255, 0.3));
+  mix-blend-mode: normal; /* "Normal" allows the white background to show clearly over the dark wrapper */
 }
 
-.stadium-layout-base {
+#stadium-layout {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-/* Volumetric Tiers */
-.stadium-tier {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  transition: all 1s ease-in-out;
-}
-
-.isometric-active .tier-1 {
-  opacity: 0.5;
-  transform: translateZ(40px) scale(1.03);
-}
-
-.isometric-active .tier-2 {
-  opacity: 0.3;
-  transform: translateZ(80px) scale(1.06);
-}
-
-.isometric-active .tier-3 {
-  opacity: 0.15;
-  transform: translateZ(120px) scale(1.09);
 }
 
 #heatmaplayer {
