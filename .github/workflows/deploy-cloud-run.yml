@@ -48,9 +48,16 @@ jobs:
           docker push $IMAGE_TAG
 
       - name: Deploy to Cloud Run
+        id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: ${{ env.SERVICE_NAME }}
           region: ${{ env.REGION }}
           image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
           flags: --allow-unauthenticated --port=8080
+
+      - name: Show Deployed URL
+        run: |
+          echo "=================================================="
+          echo "🚀 Your service is live at: ${{ steps.deploy.outputs.url }}"
+          echo "=================================================="
