@@ -6,7 +6,7 @@ A premium, highly-optimized telemetry dashboard for real-time crowd flow analysi
 
 ## 🔗 Live Deployment (Google Cloud Run)
 Once deployed, your live application is hosted at:
-👉 **[Live Demo Website Link](https://real-time-crowd-heatmaps-YOUR_URL_HASH-uc.a.run.app)** *(Replace this with your generated Cloud Run URL once the deployment is complete!)*
+👉 **[Live Demo Website Link](https://real-time-crowd-heatmaps-ncllrfp4ga-uc.a.run.app)**
 
 ---
 
